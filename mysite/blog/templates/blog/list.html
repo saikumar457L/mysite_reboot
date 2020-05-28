@@ -1,0 +1,41 @@
+{% extends 'blog/base.html' %}
+
+{% load blog_tags %}
+
+{% block title %}Mushrooms {% endblock title %}
+
+
+{% block content %}
+
+<div class="Mushrooms-home">
+  <h3>Mushrooms</h3>
+    <!-- Remember must use page_obj while using pagination --!>
+  {% for mushroom in page_obj %}
+    <h4><a href="{% url 'blog:post_detail' mushroom.pk %}">{{mushroom.title}}</a></h4>
+    <p>Tags: {{mushroom.tags.all|join:", "}}</p>
+    <p>Published by {{mushroom.author}} on {{mushroom.publish}}</p>
+    <p>{{ mushroom.body|markdown|truncatewords_html:30 }}</p>
+  {% endfor %}
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+
+
+{% endblock content %}
